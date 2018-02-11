@@ -1,0 +1,39 @@
+{
+  "name": "gatsby-directus",
+  "version": "0.0.1",
+  "description": "Gets directus data for gatsby",
+  "main": "gatsby-node.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mtbottens/gatsby-directus.git"
+  },
+  "scripts": {
+    "build": "babel src --out-dir . --ignore __tests__",
+    "prepublishOnly": "cross-env NODE_ENV=production npm run build",
+    "watch": "babel -w src --out-dir . --ignore __tests__"
+  },
+  "bugs": {
+    "url": "https://github.com/mtbottens/gatsby-directus/issues"
+  },
+  "author": "Michael Bottens <michae@bottens.me>",
+  "license": "MIT",
+  "dependencies": {
+    "babel-runtime": "^6.26.0",
+    "directus-sdk-javascript": "^2.5.1",
+    "fs-extra": "^5.0.0",
+    "lodash": "^4.17.5",
+    "request": "^2.83.0"
+  },
+  "keywords": [
+    "gatsby",
+    "gatsby-source-plugin"
+    "gatsby-directus"
+  ],
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "colors": "^1.1.2",
+    "cross-env": "^5.0.5"
+  }
+}
