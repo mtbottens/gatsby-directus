@@ -34,7 +34,7 @@ export default {
         return columnData.ui === 'single_file' && columnData.related_table === 'directus_files';
     },
 
-    transform: ({
+    transform: async ({
         program,
         url,
         table,
@@ -47,7 +47,7 @@ export default {
     }) => {
         let imageUrlOnServer = `${url}${value.data.url}`;
         let localImagePath = `${program.directory}/.cache/directus${value.data.url}`;
-        downloadAndMoveToCache(imageUrlOnServer, localImagePath);
+        await downloadAndMoveToCache(imageUrlOnServer, localImagePath);
         /** TODO: Better way to get name and mimetype for the file */
         let fileName = value.data.name.replace(/\..*?$/, '');
         let fileType = value.data.name.replace(/.*\./, '');

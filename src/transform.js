@@ -53,7 +53,7 @@ const createNodeId = (...identifiers) => {
 /** Array of transformer objects used to convert data to corrent types */
 const transformers = [markdown, image];
 
-const transformer = ({ url, program, currentTables, createNode }) => {
+const transformer = async ({ url, program, currentTables, createNode }) => {
     let entitiesCreated = 0;
     let EntityTypesArray = [];
 
@@ -95,7 +95,7 @@ const transformer = ({ url, program, currentTables, createNode }) => {
                 });
 
                 if (columnTransformer) {
-                    const node = columnTransformer.transform({
+                    const node = await columnTransformer.transform({
                         url,
                         program,
                         table,
@@ -114,7 +114,7 @@ const transformer = ({ url, program, currentTables, createNode }) => {
                 }
             }
 
-            directusEntity = { ...complexFields, ...basicFields, ...directusEntity};
+            directusEntity = { ...complexFields, ...basicFields, ...directusEntity };
             directusEntity.internal.contentDigest = digest(JSON.stringify(directusEntity));
             createNode(directusEntity);
 

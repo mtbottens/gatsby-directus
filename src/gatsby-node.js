@@ -20,7 +20,7 @@ const sourceNodes = async (
         accessToken
     });
 
-    transformer({
+    await transformer({
         url,
         accessToken,
         program,

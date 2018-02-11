@@ -3,7 +3,7 @@ export default {
         return columnData.ui === 'markdown';
     },
 
-    transform: ({
+    transform: async ({
         table,
         entity,
         directusEntity,
