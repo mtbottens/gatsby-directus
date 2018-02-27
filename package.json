@@ -1,6 +1,6 @@
 {
   "name": "gatsby-directus",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Gets directus data for gatsby",
   "main": "gatsby-node.js",
   "repository": {
