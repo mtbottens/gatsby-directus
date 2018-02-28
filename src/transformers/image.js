@@ -68,6 +68,10 @@ export default {
             }
         };
 
-        return node;
+        return {
+            node,
+            type: 'complex',
+            value: value
+        };
     }
 };

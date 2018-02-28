@@ -12,6 +12,12 @@ export default {
         createNodeId,
         digest
     }) => {
+        if (!value) {
+            return {
+                value
+            };
+        }
+
         const node = {
             id: createNodeId(table.name, entity.id, validKey),
             parent: directusEntity.id,
@@ -25,6 +31,10 @@ export default {
             }
         };
         
-        return node;
+        return {
+            type: 'complex',
+            node,
+            value
+        };
     }
 };

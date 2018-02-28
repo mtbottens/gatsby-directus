@@ -3,6 +3,7 @@ import _ from 'lodash';
 import Colors from 'colors';
 import markdown from './transformers/markdown';
 import image from './transformers/image';
+import toggle from './transformers/toggle';
 import relationManyToMany from './transformers/relation/many-to-many';
 
 /**
@@ -52,7 +53,7 @@ const createNodeId = (...identifiers) => {
 };
 
 /** Array of transformer objects used to convert data to corrent types */
-const transformers = [markdown, image, relationManyToMany];
+const transformers = [markdown, image, toggle, relationManyToMany];
 
 let allTables = false;
 let entitiesCreated = 0;
@@ -120,7 +121,7 @@ const buildTable = async ({
             });
 
             if (columnTransformer) {
-                const node = await columnTransformer.transform({
+                const transformedNode = await columnTransformer.transform({
                     url,
                     program,
                     table,
@@ -135,9 +136,14 @@ const buildTable = async ({
                     getTable,
                     createNode
                 });
-                createNode(node);
-                directusEntity.children = directusEntity.children.concat([node.id]);
-                complexFields[`${validKey}___NODE`] = node.id;
+
+                if (transformedNode.type === 'complex') {
+                    createNode(transformedNode.node);
+                    directusEntity.children = directusEntity.children.concat([transformedNode.node.id]);
+                    complexFields[`${validKey}___NODE`] = transformedNode.node.id;
+                } else {
+                    basicFields[validKey] = transformedNode.value;
+                }
             } else {
                 basicFields[validKey] = value;
             }
