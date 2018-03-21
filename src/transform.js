@@ -1,10 +1,9 @@
 import crypto from 'crypto';
 import _ from 'lodash';
-import Colors from 'colors';
+
 import markdown from './transformers/markdown';
-import image from './transformers/image';
 import toggle from './transformers/toggle';
-import relationManyToMany from './transformers/relation/many-to-many';
+import manyToMany from './transformers/relation/many-to-many';
 
 /**
  * Returns string with first letter uppercased
@@ -43,137 +42,129 @@ const NODE_ID_PREFIX = `Directus`;
  * @param  {String[]} ...identifiers
  */
 const createNodeId = (...identifiers) => {
-    let nodeId = `${NODE_ID_PREFIX}`;
+    let nodeId = '';
 
     for (let identifier of identifiers) {
         nodeId += `__${identifier}`;
     }
 
+    // Strip out extra prefixes due to crappy code on my part
+    nodeId = nodeId.replace(`${NODE_ID_PREFIX}`, '').replace(/____/g, '__').replace(/^__/, '');
+    nodeId = `${NODE_ID_PREFIX}__${nodeId}`;
+
     return nodeId;
 };
 
-/** Array of transformer objects used to convert data to corrent types */
-const transformers = [markdown, image, toggle, relationManyToMany];
+/** Global to assist in table data lookup */
+let AllTransformerTables;
+let transformers = [markdown, toggle, manyToMany];
+const dependentNodeQueue = [];
 
-let allTables = false;
-let entitiesCreated = 0;
-let EntityTypesArray = [];
+const transformer = async ({ currentTables, allTables }) => {
+    if (allTables) {
+        AllTransformerTables = allTables;
+    }
 
-const transformer = async ({ url, program, currentTables, createNode }) => {
-    allTables = currentTables;
+    const transformerData = {};
 
     for (let table of currentTables) {
-        await buildTable({
-            table,
-            createNode,
-            url,
-            program
+        const tableData = await buildTable({
+            table
         });
+
+        transformerData[table.name] = tableData;
     }
 
-    // Output generation stats to console
-    console.log(`\nDirectus Entity Types Processed: ${EntityTypesArray.length}`.blue);
-    console.log(`Directus Entities Created: ${entitiesCreated}`.blue);
+    return transformerData;
 };
 
-const buildTable = async ({
-    table,
-    createNode,
-    url,
-    program
-}) => {
-    // For fields that require no additional processing
-    const basicFields = {};
-    // For fields that need processing, ie. Adding mime/types for transformer plugins
-    const complexFields = {};
-    // Gets each entity from the table
-    const entries = table.entries.slice();
+const buildTable = async ({ table }) => {
+    const tableRows = table.entries.slice();
 
-    // Return value of this method, can be optionally used by transformers for setting children
-    const entities = [];
+    const entries = [];
 
-    for (let entity of entries) {
-        const entityId = createNodeId(upperCase(table.name), entity.id);
-        const entityType = createNodeId(upperCase(table.name));
-
-        // Create a node for this entity
-        const directusEntity = {
-            id: entityId,
-            parent: `__source__`,
-            children: [],
-            internal: {
-                type: entityType
-            }
-        };
-
-        // Remove conflicting fields
-        const validKeys = _.filter(Object.keys(entity), (key) => {
-            return RESTRICTED_NODE_FIELDS.indexOf(key) === -1;
+    for (let entry of tableRows) {
+        const entryData = await buildEntry({
+            tableName: table.name,
+            entry
         });
 
-        // Loop through each valid key and transform them into basic or complex nodes
-        for (let validKey of validKeys) {
-            const columnData = lookupColumnData(table.name, validKey);
-            const value = entity[validKey];
-
-            const columnTransformer = _.find(transformers, function(transformer) {
-                return transformer.test(columnData);
-            });
-
-            if (columnTransformer) {
-                const transformedNode = await columnTransformer.transform({
-                    url,
-                    program,
-                    table,
-                    entity,
-                    directusEntity,
-                    validKey,
-                    value,
-                    createNodeId,
-                    digest,
-                    lookupColumnData,
-                    buildTable,
-                    getTable,
-                    createNode
-                });
-
-                if (transformedNode.type === 'complex') {
-                    createNode(transformedNode.node);
-                    directusEntity.children = directusEntity.children.concat([transformedNode.node.id]);
-                    complexFields[`${validKey}___NODE`] = transformedNode.node.id;
-                } else {
-                    basicFields[validKey] = transformedNode.value;
-                }
-            } else {
-                basicFields[validKey] = value;
-            }
-        }
-
-        directusEntity = { ...complexFields, ...basicFields, ...directusEntity };
-        directusEntity.internal.contentDigest = digest(JSON.stringify(directusEntity));
-        createNode(directusEntity);
-        entities.push(directusEntity);
-
-        // Stats for console
-        if (EntityTypesArray.indexOf(entityType) === -1) EntityTypesArray.push(entityType);
-        entitiesCreated++;
+        entries.push(entryData);
     }
 
-    return entities;
+    return entries;
+};
+
+const buildEntry = async ({ tableName, entry, foreignTableReference, parentOverride }) => {
+    const basicFields = {};
+    const complexFields = {};
+    const entryId = createNodeId(upperCase(tableName), entry.id);
+    const entryType = createNodeId(upperCase(tableName));
+
+    let directusEntry = {
+        id: entryId,
+        parent: parentOverride || `__source__`,
+        children: [],
+        internal: {
+            type: entryType
+        }
+    };
+
+    const validColumnNames = Object.keys(entry).filter(key => RESTRICTED_NODE_FIELDS.indexOf(key) === -1);
+
+    for (let columnName of validColumnNames) {
+        const columnData = lookupColumnData({
+            tableName: foreignTableReference || tableName,
+            columnName
+        });
+        const value = entry[columnName];
+
+        const columnTransformer = _.find(transformers, function(transformer) {
+            return transformer.test(columnData);
+        });
+
+        if (columnTransformer) {
+            const transformedNode = await columnTransformer.transform({
+                tableName,
+                entryId,
+                entryType,
+                columnData,
+                value,
+                entry,
+                foreignTableReference,
+                directusEntry
+            });
+
+            if (transformedNode.type === 'complex') {
+                dependentNodeQueue.push(transformedNode.node);
+                directusEntry.children = directusEntry.children.concat([transformedNode.node.id]);
+                complexFields[`${columnName}___NODE`] = transformedNode.node.id;
+            } else {
+                basicFields[columnName] = transformedNode.value;
+            }
+        } else {
+            basicFields[columnName] = value;
+        }
+    }
+
+    directusEntry = { ...complexFields, ...basicFields, ...directusEntry };
+    directusEntry.internal.contentDigest = digest(JSON.stringify(directusEntry));
+    
+    return directusEntry;
 };
 
 const getTable = (tableName) => {
-    const table = _.find(allTables, {
+    const table = _.find(AllTransformerTables, {
         table_name: tableName
     });
-    if (table.id) {
+    if (table && table.id) {
         return table;
     } else {
         throw new Error(`Table: "${tableName}" does not exist`);
     }
 };
 
-const lookupColumnData = (tableName, columnName) => {
+const lookupColumnData = ({ tableName, columnName }) => {
     const table = getTable(tableName);
 
     if (table) {
@@ -183,4 +174,4 @@ const lookupColumnData = (tableName, columnName) => {
     return false;
 };
 
-export { transformer };
+export { transformer, getTable, buildEntry, digest, createNodeId, upperCase, dependentNodeQueue };

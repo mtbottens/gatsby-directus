@@ -1,16 +1,19 @@
+import { buildEntry, digest, createNodeId } from '../transform';
+
 export default {
     test: (columnData) => {
         return columnData.ui === 'markdown';
     },
 
     transform: async ({
-        table,
-        entity,
-        directusEntity,
-        validKey,
+        tableName,
+        entryId,
+        entryType,
+        columnData,
         value,
-        createNodeId,
-        digest
+        entry,
+        foreignTableReference,
+        directusEntry
     }) => {
         if (!value) {
             return {
@@ -19,12 +22,11 @@ export default {
         }
 
         const node = {
-            id: createNodeId(table.name, entity.id, validKey),
-            parent: directusEntity.id,
+            id: createNodeId(entryId, columnData.id),
+            parent: directusEntry.id,
             children: [],
-            [validKey]: value,
             internal: {
-                type: validKey,
+                type: createNodeId(tableName, columnData.id),
                 mediaType: `text/markdown`,
                 content: value,
                 contentDigest: digest(value)

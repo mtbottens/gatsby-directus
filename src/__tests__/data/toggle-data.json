@@ -1,0 +1,23 @@
+[
+    {
+        "id": "test_table",
+        "name": "test_table",
+        "table_name": "test_table",
+        "entries": [{
+            "id": 1,
+            "somedata": "somevalue",
+            "toggle": true
+        }, {
+            "id": 2,
+            "somedata": "somevalue",
+            "toggle": null
+        }],
+        "columns": {
+            "data": [
+                {"id": "id"},
+                {"id": "somedata"},
+                {"id": "toggle", "ui": "toggle"}
+            ]
+        }
+    }
+]

@@ -1,46 +1,36 @@
+import { buildEntry, digest, createNodeId, getTable, dependentNodeQueue, upperCase } from '../../transform';
+
 export default {
     test: (columnData) => {
-        return columnData.ui === 'many_to_many' && columnData.type === 'ALIAS';
+        return columnData.ui === 'many_to_many';
     },
 
     transform: async ({
-        table,
-        entity,
-        directusEntity,
-        validKey,
+        tableName,
+        entryId,
+        entryType,
+        columnData,
         value,
-        createNodeId,
-        digest,
-        lookupColumnData,
-        buildTable,
-        getTable,
-        createNode,
-        url,
-        program
+        entry,
+        foreignTableReference,
+        directusEntry
     }) => {
-        const columnData = lookupColumnData(table.name, validKey);
-        const entries = await buildTable({
-            table: getTable(columnData.relationship.related_table),
-            createNode,
-            url,
-            program
-        });
+        const relatedEntryIds = value.data.map(relatedEntry => relatedEntry.id);
+        const relatedEntries = getTable(value.meta.table).entries.filter(relatedEntry => relatedEntryIds.indexOf(relatedEntry.id) > -1);
 
-        const node = {
-            id: createNodeId(table.name, entity.id, validKey),
-            parent: directusEntity.id,
-            children: entries.map(entry => entry.id),
-            internal: {
-                type: validKey,
-                content: JSON.stringify(value),
-                contentDigest: digest(JSON.stringify(value))
-            }
-        };
+        const entryNodes = [];
+        for (let entry of relatedEntries) {
+            const entryNode = await buildEntry({
+                tableName: `${tableName}__${value.meta.table}`,
+                foreignTableReference: value.meta.table,
+                entry
+            });
+            entryNodes.push(entryNode);
+        }
         
         return {
-            type: 'complex',
-            node,
-            value: value
-        }
+            node: {},
+            value: entryNodes
+        };
     }
 };

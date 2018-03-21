@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Processes Data From Directus CMS Properly Builds Simple Tables 1`] = `
+Object {
+  "test_table": Array [
+    Object {
+      "children": Array [],
+      "id": "DirectusTransformNew__Test_table__1",
+      "internal": Object {
+        "contentDigest": "bd2355d5dfd36b234ced5b72a05245c3",
+        "type": "DirectusTransformNew__Test_table",
+      },
+      "parent": "__source__",
+      "somedata": "somevalue",
+    },
+  ],
+}
+`;
+
+exports[`Processes Data From Directus CMS Properly Processes Markdown Complex Fields 1`] = `
+Object {
+  "test_table": Array [
+    Object {
+      "children": Array [
+        "DirectusTransformNew__DirectusTransformNew__Test_table__1__markdown",
+      ],
+      "id": "DirectusTransformNew__Test_table__1",
+      "internal": Object {
+        "contentDigest": "e49e0b25bacedeb2577278051a4cb8b3",
+        "type": "DirectusTransformNew__Test_table",
+      },
+      "markdown___NODE": "DirectusTransformNew__DirectusTransformNew__Test_table__1__markdown",
+      "parent": "__source__",
+      "somedata": "somevalue",
+    },
+  ],
+}
+`;
+
+exports[`Processes Data From Directus CMS Properly Processes Toggle Complex Fields 1`] = `
+Object {
+  "test_table": Array [
+    Object {
+      "children": Array [],
+      "id": "DirectusTransformNew__Test_table__1",
+      "internal": Object {
+        "contentDigest": "c00f11734f0b0cbae48dd4b83ebd8459",
+        "type": "DirectusTransformNew__Test_table",
+      },
+      "parent": "__source__",
+      "somedata": "somevalue",
+      "toggle": true,
+    },
+    Object {
+      "children": Array [],
+      "id": "DirectusTransformNew__Test_table__2",
+      "internal": Object {
+        "contentDigest": "08fa8321c8adc3a367b8a707bde2c530",
+        "type": "DirectusTransformNew__Test_table",
+      },
+      "parent": "__source__",
+      "somedata": "somevalue",
+      "toggle": false,
+    },
+  ],
+}
+`;

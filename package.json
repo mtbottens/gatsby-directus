@@ -1,6 +1,6 @@
 {
   "name": "gatsby-directus",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Gets directus data for gatsby",
   "main": "gatsby-node.js",
   "repository": {
@@ -10,7 +10,11 @@
   "scripts": {
     "build": "babel src --out-dir . --ignore __tests__",
     "prepublishOnly": "cross-env NODE_ENV=production npm run build",
-    "watch": "babel -w src --out-dir . --ignore __tests__"
+    "watch": "babel -w src --out-dir . --ignore __tests__",
+    "jest": "jest",
+    "test": "npm run jest",
+    "test:watch": "jest --watch",
+    "test:update": "jest --updateSnapshot"
   },
   "bugs": {
     "url": "https://github.com/mtbottens/gatsby-directus/issues"
@@ -31,9 +35,12 @@
   ],
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-jest": "^22.4.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "colors": "^1.1.2",
-    "cross-env": "^5.0.5"
+    "cross-env": "^5.0.5",
+    "jest": "^22.4.2",
+    "jest-cli": "^22.4.2"
   }
 }

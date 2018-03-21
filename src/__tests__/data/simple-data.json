@@ -1,0 +1,17 @@
+[
+    {
+        "id": "test_table",
+        "name": "test_table",
+        "table_name": "test_table",
+        "entries": [{
+            "id": 1,
+            "somedata": "somevalue"
+        }],
+        "columns": {
+            "data": [
+                {"id": "id"},
+                {"id": "somedata"}
+            ]
+        }
+    }
+]
