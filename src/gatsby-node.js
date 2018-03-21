@@ -1,5 +1,5 @@
 import fetchData from './fetch';
-import { transformer, dependentNodeQueue } from './transform';
+import { transformer, dependentNodeQueue, setProgramDirectory, setSiteUrl } from './transform';
 import _ from 'lodash';
 
 const apiVersion = '1.1';
@@ -9,6 +9,8 @@ const sourceNodes = async (
     { url, accessToken }
 ) => {
     const program = store.getState().program;
+    setProgramDirectory(program.directory);
+    setSiteUrl(url);
     const {
         createNode
     } = boundActionCreators;
@@ -24,7 +26,7 @@ const sourceNodes = async (
     const transformerData = await transformer({
         allTables,
         currentTables: allTables,
-        createNode
+        createNode,
     });
 
     const createNodeQueue = _.flatten(dependentNodeQueue.concat(Object.values(transformerData)));

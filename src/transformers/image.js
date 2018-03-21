@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import request from 'request';
 import Colors from 'colors';
+import { programDirectory, siteUrl, buildEntry, digest, createNodeId } from '../transform';
 
 /**
  * Downloads file from directus server to file system
@@ -31,22 +32,22 @@ const downloadAndMoveToCache = async (url, localFile) => {
 
 export default {
     test: (columnData) => {
+        console.log(columnData);
         return columnData.ui === 'single_file' && columnData.related_table === 'directus_files';
     },
 
     transform: async ({
-        program,
-        url,
-        table,
-        entity,
-        directusEntity,
-        validKey,
+        tableName,
+        entryId,
+        entryType,
+        columnData,
         value,
-        createNodeId,
-        digest
+        entry,
+        foreignTableReference,
+        directusEntry
     }) => {
-        let imageUrlOnServer = `${url}${value.data.url}`;
-        let localImagePath = `${program.directory}/.cache/directus${value.data.url}`;
+        let imageUrlOnServer = `${siteUrl}${value.data.url}`;
+        let localImagePath = `${programDirectory}/.cache/directus${value.data.url}`;
         await downloadAndMoveToCache(imageUrlOnServer, localImagePath);
         /** TODO: Better way to get name and mimetype for the file */
         let fileName = value.data.name.replace(/\..*?$/, '');
@@ -54,14 +55,14 @@ export default {
         let mimeType = `image/${fileType}`;
 
         const node = {
-            id: createNodeId(table.name, entity.id, validKey),
-            parent: directusEntity.id,
+            id: createNodeId(entryId, columnData.id),
+            parent: directusEntry.id,
             children: [],
             absolutePath: localImagePath,
             extension: fileType,
             name: fileName,
             internal: {
-                type: validKey,
+                type: createNodeId(tableName, columnData.id),
                 mediaType: mimeType,
                 content: imageUrlOnServer,
                 contentDigest: digest(localImagePath)

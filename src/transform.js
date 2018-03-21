@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import markdown from './transformers/markdown';
 import toggle from './transformers/toggle';
+import image from './transformers/image';
 import manyToMany from './transformers/relation/many-to-many';
 
 /**
@@ -57,7 +58,7 @@ const createNodeId = (...identifiers) => {
 
 /** Global to assist in table data lookup */
 let AllTransformerTables;
-let transformers = [markdown, toggle, manyToMany];
+let transformers = [markdown, toggle, image, manyToMany];
 const dependentNodeQueue = [];
 
 const transformer = async ({ currentTables, allTables }) => {
@@ -174,4 +175,14 @@ const lookupColumnData = ({ tableName, columnName }) => {
     return false;
 };
 
-export { transformer, getTable, buildEntry, digest, createNodeId, upperCase, dependentNodeQueue };
+let programDirectory;
+let siteUrl;
+
+const setProgramDirectory = (dir) => {
+    programDirectory = dir;
+}
+const setSiteUrl = (url) => {
+    siteUrl = url;
+}
+
+export { setProgramDirectory, setSiteUrl, programDirectory, siteUrl, transformer, getTable, buildEntry, digest, createNodeId, upperCase, dependentNodeQueue };
