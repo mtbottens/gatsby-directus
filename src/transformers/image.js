@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import request from 'request';
 import Colors from 'colors';
+import path from 'path';
 import { programDirectory, siteUrl, buildEntry, digest, createNodeId } from '../transform';
 
 /**
@@ -30,9 +31,18 @@ const downloadAndMoveToCache = async (url, localFile) => {
     }
 };
 
+let fileCopied = false;
+const copyDefaultFile = (newPath) => {
+    if (!fileCopied) {
+        fs.copySync(path.resolve(__dirname, '../image/default.png'), newPath);
+        fileCopied = true;
+    }
+
+    return true;
+};
+
 export default {
     test: (columnData) => {
-        console.log(columnData);
         return columnData.ui === 'single_file' && columnData.related_table === 'directus_files';
     },
 
@@ -46,13 +56,23 @@ export default {
         foreignTableReference,
         directusEntry
     }) => {
-        let imageUrlOnServer = `${siteUrl}${value.data.url}`;
-        let localImagePath = `${programDirectory}/.cache/directus${value.data.url}`;
-        await downloadAndMoveToCache(imageUrlOnServer, localImagePath);
-        /** TODO: Better way to get name and mimetype for the file */
-        let fileName = value.data.name.replace(/\..*?$/, '');
-        let fileType = value.data.name.replace(/.*\./, '');
-        let mimeType = `image/${fileType}`;
+        let localImagePath, imageUrlOnServer, fileName, fileType, mimeType;
+        if (!value) {
+            localImagePath = `${programDirectory}/.cache/directus/__default.png`;
+            imageUrlOnServer = localImagePath;
+            copyDefaultFile(localImagePath);
+            fileName = '__default.png';
+            fileType = 'png';
+            mimeType = `image/${fileType}`;
+        } else {
+            imageUrlOnServer = `${siteUrl}${value.data.url}`;
+            localImagePath = `${programDirectory}/.cache/directus${value.data.url}`;
+            await downloadAndMoveToCache(imageUrlOnServer, localImagePath);
+            /** TODO: Better way to get name and mimetype for the file */
+            fileName = value.data.name.replace(/\..*?$/, '');
+            fileType = value.data.name.replace(/.*\./, '');
+            mimeType = `image/${fileType}`;
+        }
 
         const node = {
             id: createNodeId(entryId, columnData.id),

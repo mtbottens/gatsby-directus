@@ -1,6 +1,6 @@
 {
   "name": "gatsby-directus",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Gets directus data for gatsby",
   "main": "gatsby-node.js",
   "repository": {
@@ -26,6 +26,7 @@
     "directus-sdk-javascript": "^2.5.1",
     "fs-extra": "^5.0.0",
     "lodash": "^4.17.5",
+    "path": "^0.12.7",
     "request": "^2.83.0"
   },
   "keywords": [
