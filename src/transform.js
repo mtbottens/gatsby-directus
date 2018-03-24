@@ -4,6 +4,7 @@ import _ from 'lodash';
 import markdown from './transformers/markdown';
 import toggle from './transformers/toggle';
 import image from './transformers/image';
+import manyToOne from './transformers/relation/many-to-one';
 import manyToMany from './transformers/relation/many-to-many';
 
 /**
@@ -58,7 +59,7 @@ const createNodeId = (...identifiers) => {
 
 /** Global to assist in table data lookup */
 let AllTransformerTables;
-let transformers = [markdown, toggle, image, manyToMany];
+let transformers = [markdown, toggle, image, manyToOne, manyToMany];
 const dependentNodeQueue = [];
 
 const transformer = async ({ currentTables, allTables }) => {
