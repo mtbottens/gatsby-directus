@@ -1,0 +1,49 @@
+[
+    {
+        "id": "test_table",
+        "name": "test_table",
+        "table_name": "test_table",
+        "entries": [{
+            "id": 1,
+            "somedata": "somevalue",
+            "type": {
+                "data": [{
+                    "id": 1
+                }, {
+                    "id": 2
+                }],
+                "meta": {
+                    "table": "test_table_types"
+                }
+            }
+        }],
+        "columns": {
+            "data": [
+                {"id": "id"},
+                {"id": "somedata"},
+                {"id": "type", "ui": "many_to_many"}
+            ]
+        }
+    },
+    {
+        "id": "test_table_types",
+        "name": "test_table_types",
+        "table_name": "test_table_types",
+        "entries": [{
+            "id": 1,
+            "type": "sometype",
+            "type_description": "# this type is the best type"
+        }, {
+            "id": 2,
+            "type": "sometype",
+            "type_description": "# no this is the best type for real"
+        }],
+        "columns": {
+            "data": [
+                {"id": "id"},
+                {"id": "type"},
+                {"id": "type_description", "ui": "markdown"}
+            ]
+        }
+    }
+]

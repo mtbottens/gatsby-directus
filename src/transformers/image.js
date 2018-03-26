@@ -41,9 +41,17 @@ const copyDefaultFile = (newPath) => {
     return true;
 };
 
+let gatsbyImageDoesNotExist = true;
+try {
+    require.resolve(`gatsby-image`);
+    require.resolve(`gatsby-plugin-sharp`);
+    require.resolve(`gatsby-transformer-sharp`);
+    gatsbyImageDoesNotExist = false;
+} catch (exception) {}
+
 export default {
     test: (columnData) => {
-        return columnData.ui === 'single_file' && columnData.related_table === 'directus_files';
+        return !gatsbyImageDoesNotExist && columnData.ui === 'single_file' && columnData.related_table === 'directus_files';
     },
 
     transform: async ({

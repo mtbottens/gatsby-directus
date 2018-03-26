@@ -29,7 +29,7 @@ const sourceNodes = async (
         createNode,
     });
 
-    const createNodeQueue = _.flatten(dependentNodeQueue.concat(Object.values(transformerData)));
+    const createNodeQueue = _.flatten(transformerData.dependentNodeQueue.concat(Object.values(transformerData.data)));
     const createdNodes = {};
 
     while (createNodeQueue.length !== 0) {

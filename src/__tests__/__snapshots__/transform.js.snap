@@ -2,16 +2,93 @@
 
 exports[`Processes Data From Directus CMS Properly Builds Simple Tables 1`] = `
 Object {
-  "test_table": Array [
+  "data": Object {
+    "test_table": Array [
+      Object {
+        "children": Array [],
+        "id": "Directus__Test_table__1",
+        "internal": Object {
+          "contentDigest": "eaeab362f5df52fdcd00c6f60e370629",
+          "type": "Directus__Test_table",
+        },
+        "parent": "__source__",
+        "somedata": "somevalue",
+      },
+    ],
+  },
+  "dependentNodeQueue": Array [],
+}
+`;
+
+exports[`Processes Data From Directus CMS Properly Processes Many to One Relationships 1`] = `
+Object {
+  "data": Object {
+    "test_table": Array [
+      Object {
+        "children": Array [
+          "Directus__Test_table__test_table_type__1",
+        ],
+        "id": "Directus__Test_table__1",
+        "internal": Object {
+          "contentDigest": "0e69c7aa9b28ca52b615eaab7cdfe4d4",
+          "type": "Directus__Test_table",
+        },
+        "parent": "__source__",
+        "somedata": "somevalue",
+        "type___NODE": "Directus__Test_table__test_table_type__1",
+      },
+    ],
+    "test_table_type": Array [
+      Object {
+        "children": Array [
+          "Directus__Test_table_type__1__type_description",
+        ],
+        "id": "Directus__Test_table_type__1",
+        "internal": Object {
+          "contentDigest": "134247ec0bdf8735ee3277fa715aa5ed",
+          "type": "Directus__Test_table_type",
+        },
+        "parent": "__source__",
+        "type": "sometype",
+        "type_description___NODE": "Directus__Test_table_type__1__type_description",
+      },
+    ],
+  },
+  "dependentNodeQueue": Array [
     Object {
       "children": Array [],
-      "id": "DirectusTransformNew__Test_table__1",
+      "id": "Directus__Test_table__test_table_type__1__type_description",
       "internal": Object {
-        "contentDigest": "bd2355d5dfd36b234ced5b72a05245c3",
-        "type": "DirectusTransformNew__Test_table",
+        "content": "# this type is the best type",
+        "contentDigest": "b38ca283f92e383995a73e343405b5d8",
+        "mediaType": "text/markdown",
+        "type": "Directus__test_table__test_table_type__type_description",
+      },
+      "parent": "Directus__Test_table__test_table_type__1",
+    },
+    Object {
+      "children": Array [
+        "Directus__Test_table__test_table_type__1__type_description",
+      ],
+      "id": "Directus__Test_table__test_table_type__1",
+      "internal": Object {
+        "contentDigest": "b047a3c8de2ea749191460ee71f68691",
+        "type": "Directus__Test_table__test_table_type",
       },
       "parent": "__source__",
-      "somedata": "somevalue",
+      "type": "sometype",
+      "type_description___NODE": "Directus__Test_table__test_table_type__1__type_description",
+    },
+    Object {
+      "children": Array [],
+      "id": "Directus__Test_table_type__1__type_description",
+      "internal": Object {
+        "content": "# this type is the best type",
+        "contentDigest": "b38ca283f92e383995a73e343405b5d8",
+        "mediaType": "text/markdown",
+        "type": "Directus__test_table_type__type_description",
+      },
+      "parent": "Directus__Test_table_type__1",
     },
   ],
 }
@@ -19,19 +96,34 @@ Object {
 
 exports[`Processes Data From Directus CMS Properly Processes Markdown Complex Fields 1`] = `
 Object {
-  "test_table": Array [
-    Object {
-      "children": Array [
-        "DirectusTransformNew__DirectusTransformNew__Test_table__1__markdown",
-      ],
-      "id": "DirectusTransformNew__Test_table__1",
-      "internal": Object {
-        "contentDigest": "e49e0b25bacedeb2577278051a4cb8b3",
-        "type": "DirectusTransformNew__Test_table",
+  "data": Object {
+    "test_table": Array [
+      Object {
+        "children": Array [
+          "Directus__Test_table__1__markdown",
+        ],
+        "id": "Directus__Test_table__1",
+        "internal": Object {
+          "contentDigest": "2e744fc7f674a025aef1e2d48f536716",
+          "type": "Directus__Test_table",
+        },
+        "markdown___NODE": "Directus__Test_table__1__markdown",
+        "parent": "__source__",
+        "somedata": "somevalue",
       },
-      "markdown___NODE": "DirectusTransformNew__DirectusTransformNew__Test_table__1__markdown",
-      "parent": "__source__",
-      "somedata": "somevalue",
+    ],
+  },
+  "dependentNodeQueue": Array [
+    Object {
+      "children": Array [],
+      "id": "Directus__Test_table__1__markdown",
+      "internal": Object {
+        "content": "# some header",
+        "contentDigest": "d9f15833f1ef5b9a47799d0dfbbcfc78",
+        "mediaType": "text/markdown",
+        "type": "Directus__test_table__markdown",
+      },
+      "parent": "Directus__Test_table__1",
     },
   ],
 }
@@ -39,28 +131,152 @@ Object {
 
 exports[`Processes Data From Directus CMS Properly Processes Toggle Complex Fields 1`] = `
 Object {
-  "test_table": Array [
+  "data": Object {
+    "test_table": Array [
+      Object {
+        "children": Array [],
+        "id": "Directus__Test_table__1",
+        "internal": Object {
+          "contentDigest": "e5622000abf22d49740bc670e37bcf6f",
+          "type": "Directus__Test_table",
+        },
+        "parent": "__source__",
+        "somedata": "somevalue",
+        "toggle": true,
+      },
+      Object {
+        "children": Array [],
+        "id": "Directus__Test_table__2",
+        "internal": Object {
+          "contentDigest": "2867069400c698db5d384fdc18041ab9",
+          "type": "Directus__Test_table",
+        },
+        "parent": "__source__",
+        "somedata": "somevalue",
+        "toggle": false,
+      },
+    ],
+  },
+  "dependentNodeQueue": Array [],
+}
+`;
+
+exports[`Processes Data From Directus CMS Propery Processes Many to Many Relationships 1`] = `
+Object {
+  "data": Object {
+    "test_table": Array [
+      Object {
+        "children": Array [],
+        "id": "Directus__Test_table__1",
+        "internal": Object {
+          "contentDigest": "37411f9aebf5e25167e1553a17a30f25",
+          "type": "Directus__Test_table",
+        },
+        "parent": "__source__",
+        "somedata": "somevalue",
+        "type": Array [
+          Object {
+            "children": Array [
+              "Directus__Test_table__test_table_types__1__type_description",
+            ],
+            "id": "Directus__Test_table__test_table_types__1",
+            "internal": Object {
+              "contentDigest": "9fec628022927c8d82230a4577b413b4",
+              "type": "Directus__Test_table__test_table_types",
+            },
+            "parent": "__source__",
+            "type": "sometype",
+            "type_description___NODE": "Directus__Test_table__test_table_types__1__type_description",
+          },
+          Object {
+            "children": Array [
+              "Directus__Test_table__test_table_types__2__type_description",
+            ],
+            "id": "Directus__Test_table__test_table_types__2",
+            "internal": Object {
+              "contentDigest": "278b36390d55789173ced85484aea9d8",
+              "type": "Directus__Test_table__test_table_types",
+            },
+            "parent": "__source__",
+            "type": "sometype",
+            "type_description___NODE": "Directus__Test_table__test_table_types__2__type_description",
+          },
+        ],
+      },
+    ],
+    "test_table_types": Array [
+      Object {
+        "children": Array [
+          "Directus__Test_table_types__1__type_description",
+        ],
+        "id": "Directus__Test_table_types__1",
+        "internal": Object {
+          "contentDigest": "e6dd04ea6a8fcf7d53c12bd2a40d1bac",
+          "type": "Directus__Test_table_types",
+        },
+        "parent": "__source__",
+        "type": "sometype",
+        "type_description___NODE": "Directus__Test_table_types__1__type_description",
+      },
+      Object {
+        "children": Array [
+          "Directus__Test_table_types__2__type_description",
+        ],
+        "id": "Directus__Test_table_types__2",
+        "internal": Object {
+          "contentDigest": "34f3cc16b182bf928523a39babe15469",
+          "type": "Directus__Test_table_types",
+        },
+        "parent": "__source__",
+        "type": "sometype",
+        "type_description___NODE": "Directus__Test_table_types__2__type_description",
+      },
+    ],
+  },
+  "dependentNodeQueue": Array [
     Object {
       "children": Array [],
-      "id": "DirectusTransformNew__Test_table__1",
+      "id": "Directus__Test_table__test_table_types__1__type_description",
       "internal": Object {
-        "contentDigest": "c00f11734f0b0cbae48dd4b83ebd8459",
-        "type": "DirectusTransformNew__Test_table",
+        "content": "# this type is the best type",
+        "contentDigest": "b38ca283f92e383995a73e343405b5d8",
+        "mediaType": "text/markdown",
+        "type": "Directus__test_table__test_table_types__type_description",
       },
-      "parent": "__source__",
-      "somedata": "somevalue",
-      "toggle": true,
+      "parent": "Directus__Test_table__test_table_types__1",
     },
     Object {
       "children": Array [],
-      "id": "DirectusTransformNew__Test_table__2",
+      "id": "Directus__Test_table__test_table_types__2__type_description",
       "internal": Object {
-        "contentDigest": "08fa8321c8adc3a367b8a707bde2c530",
-        "type": "DirectusTransformNew__Test_table",
+        "content": "# no this is the best type for real",
+        "contentDigest": "7bac2f6afdf3e937cc58a7794342f941",
+        "mediaType": "text/markdown",
+        "type": "Directus__test_table__test_table_types__type_description",
       },
-      "parent": "__source__",
-      "somedata": "somevalue",
-      "toggle": false,
+      "parent": "Directus__Test_table__test_table_types__2",
+    },
+    Object {
+      "children": Array [],
+      "id": "Directus__Test_table_types__1__type_description",
+      "internal": Object {
+        "content": "# this type is the best type",
+        "contentDigest": "b38ca283f92e383995a73e343405b5d8",
+        "mediaType": "text/markdown",
+        "type": "Directus__test_table_types__type_description",
+      },
+      "parent": "Directus__Test_table_types__1",
+    },
+    Object {
+      "children": Array [],
+      "id": "Directus__Test_table_types__2__type_description",
+      "internal": Object {
+        "content": "# no this is the best type for real",
+        "contentDigest": "7bac2f6afdf3e937cc58a7794342f941",
+        "mediaType": "text/markdown",
+        "type": "Directus__test_table_types__type_description",
+      },
+      "parent": "Directus__Test_table_types__2",
     },
   ],
 }

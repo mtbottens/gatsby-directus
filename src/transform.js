@@ -60,13 +60,15 @@ const createNodeId = (...identifiers) => {
 /** Global to assist in table data lookup */
 let AllTransformerTables;
 let transformers = [markdown, toggle, image, manyToOne, manyToMany];
-const dependentNodeQueue = [];
+let dependentNodeQueue = [];
 
 const transformer = async ({ currentTables, allTables }) => {
     if (allTables) {
         AllTransformerTables = allTables;
     }
 
+    // Clear dependent node queue for testing
+    dependentNodeQueue = [];
     const transformerData = {};
 
     for (let table of currentTables) {
@@ -77,7 +79,10 @@ const transformer = async ({ currentTables, allTables }) => {
         transformerData[table.name] = tableData;
     }
 
-    return transformerData;
+    return {
+        data: transformerData,
+        dependentNodeQueue
+    };
 };
 
 const buildTable = async ({ table }) => {
