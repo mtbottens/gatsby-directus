@@ -20,7 +20,7 @@ Object {
 }
 `;
 
-exports[`Processes Data From Directus CMS Properly Processes Many to One Relationships 1`] = `
+exports[`Processes Data From Directus CMS Properly Processes Many to One or One to Many Relationships 1`] = `
 Object {
   "data": Object {
     "test_table": Array [

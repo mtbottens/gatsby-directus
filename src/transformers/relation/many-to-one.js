@@ -2,7 +2,7 @@ import { buildEntry, digest, createNodeId, getTable, dependentNodeQueue, upperCa
 
 export default {
     test: (columnData) => {
-        return columnData.ui === 'many_to_one';
+        return columnData.ui === 'many_to_one' || columnData.ui === 'many_to_one_typeahead';
     },
 
     transform: async ({

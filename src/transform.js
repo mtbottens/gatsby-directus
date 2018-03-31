@@ -149,6 +149,13 @@ const buildEntry = async ({ tableName, entry, foreignTableReference, parentOverr
             } else {
                 basicFields[columnName] = transformedNode.value;
             }
+
+            if (transformedNode.processValueAsDependentNodesArray) {
+                for (let dependentNode of transformedNode.value) {
+                    console.log(dependentNode);
+                    dependentNodeQueue.push(dependentNode);
+                }
+            }
         } else {
             basicFields[columnName] = value;
         }

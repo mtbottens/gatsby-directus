@@ -37,7 +37,7 @@ describe(`Processes Data From Directus CMS`, () => {
         expect(transformedData).toMatchSnapshot();
     })
 
-    it(`Properly Processes Many to One Relationships`, async () => {
+    it(`Properly Processes Many to One or One to Many Relationships`, async () => {
         let transformedData = await transformer({
             currentTables: manyToOneData,
             allTables: manyToOneData
