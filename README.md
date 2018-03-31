@@ -1,5 +1,7 @@
 # Gatsby Directus
 
+[![Build Status](https://travis-ci.org/mtbottens/gatsby-directus.svg?branch=master)](https://travis-ci.org/mtbottens/gatsby-directus)
+
 A [Gatsby](https://www.gatsbyjs.org) source plugin for [Directus](https://getdirectus.com/).
 
 ## Features
