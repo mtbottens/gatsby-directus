@@ -4,6 +4,7 @@ import _ from 'lodash';
 import markdown from './transformers/markdown';
 import toggle from './transformers/toggle';
 import image from './transformers/image';
+import multipleImage from './transformers/multiple-image';
 import manyToOne from './transformers/relation/many-to-one';
 import manyToMany from './transformers/relation/many-to-many';
 
@@ -59,7 +60,7 @@ const createNodeId = (...identifiers) => {
 
 /** Global to assist in table data lookup */
 let AllTransformerTables;
-let transformers = [markdown, toggle, image, manyToOne, manyToMany];
+let transformers = [markdown, toggle, manyToOne, manyToMany];
 let dependentNodeQueue = [];
 
 const transformer = async ({ currentTables, allTables }) => {
@@ -142,19 +143,17 @@ const buildEntry = async ({ tableName, entry, foreignTableReference, parentOverr
                 directusEntry
             });
 
+
+            if (transformedNode.dependentNodes) {
+                dependentNodeQueue = dependentNodeQueue.concat(transformedNode.dependentNodes);
+            }
+
             if (transformedNode.type === 'complex') {
                 dependentNodeQueue.push(transformedNode.node);
                 directusEntry.children = directusEntry.children.concat([transformedNode.node.id]);
                 complexFields[`${columnName}___NODE`] = transformedNode.node.id;
             } else {
                 basicFields[columnName] = transformedNode.value;
-            }
-
-            if (transformedNode.processValueAsDependentNodesArray) {
-                for (let dependentNode of transformedNode.value) {
-                    console.log(dependentNode);
-                    dependentNodeQueue.push(dependentNode);
-                }
             }
         } else {
             basicFields[columnName] = value;
@@ -197,5 +196,21 @@ const setProgramDirectory = (dir) => {
 const setSiteUrl = (url) => {
     siteUrl = url;
 }
+const enableAdvancedImageProcessing = () => {
+    transformers = transformers.concat([multipleImage, image]);
+}
 
-export { setProgramDirectory, setSiteUrl, programDirectory, siteUrl, transformer, getTable, buildEntry, digest, createNodeId, upperCase, dependentNodeQueue };
+export {
+    enableAdvancedImageProcessing, 
+    setProgramDirectory,
+    setSiteUrl,
+    programDirectory,
+    siteUrl,
+    transformer,
+    getTable,
+    buildEntry,
+    digest,
+    createNodeId,
+    upperCase,
+    dependentNodeQueue
+};

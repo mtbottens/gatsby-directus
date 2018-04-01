@@ -40,7 +40,8 @@ module.exports = {
       resolve: `gatsby-directus`,
       options: {
         url: `https://api.mydirectusdomain.com`,
-        accessToken: `AKDJFKDJ@#@#@`
+        accessToken: `AKDJFKDJ@#@#@`,
+        advancedImageProcessingEnabled: false 
       }
     },
     'gatsby-plugin-react-helmet'
@@ -57,6 +58,8 @@ It does this by downloading the images into .cache/directus.
 
 `npm install --save gatsby-image gatsby-plugin-sharp gatsby-transformer-sharp`
 
+Additionally, in order to transform gatsby image nodes we need to pass in an option to gatsby-directus telling it to include those transformers.
+
 Example Config:
 
 ```javascript
@@ -69,7 +72,8 @@ module.exports = {
       resolve: `gatsby-directus`,
       options: {
         url: `https://api.mydirectusdomain.com`,
-        accessToken: `AKDJFKDJ@#@#@`
+        accessToken: `AKDJFKDJ@#@#@`,
+        advancedImageProcessingEnabled: true
       }
     },
     'gatsby-plugin-sharp',

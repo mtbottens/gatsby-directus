@@ -1,16 +1,17 @@
 import fetchData from './fetch';
-import { transformer, dependentNodeQueue, setProgramDirectory, setSiteUrl } from './transform';
+import { transformer, dependentNodeQueue, setProgramDirectory, setSiteUrl, enableAdvancedImageProcessing } from './transform';
 import _ from 'lodash';
 
 const apiVersion = '1.1';
 
 const sourceNodes = async (
     { boundActionCreators, store },
-    { url, accessToken }
+    { url, accessToken, advancedImageProcessingEnabled }
 ) => {
     const program = store.getState().program;
     setProgramDirectory(program.directory);
     setSiteUrl(url);
+    if (advancedImageProcessingEnabled) enableAdvancedImageProcessing();
     const {
         createNode
     } = boundActionCreators;
