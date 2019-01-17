@@ -1,17 +1,9 @@
 import { buildEntry, digest, createNodeId, getTable, dependentNodeQueue, upperCase } from '../transform';
 import imageTransformer from './image';
 
-let gatsbyImageDoesNotExist = true;
-try {
-    require.resolve(`gatsby-image`);
-    require.resolve(`gatsby-plugin-sharp`);
-    require.resolve(`gatsby-transformer-sharp`);
-    gatsbyImageDoesNotExist = false;
-} catch (exception) {}
-
 export default {
     test: (columnData) => {
-        return !gatsbyImageDoesNotExist && columnData.ui === 'multiple_files' && columnData.related_table === 'directus_files';
+        return columnData.ui === 'multiple_files' && columnData.related_table === 'directus_files';
     },
 
     transform: async ({
